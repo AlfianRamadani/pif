@@ -16,8 +16,8 @@ WORKDIR /app
 
 COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --optimize-autoloader
 COPY artisan ./
+RUN composer install --no-dev --optimize-autoloader
 COPY . /app 
 
 RUN chown -R www-data:www-data /app
