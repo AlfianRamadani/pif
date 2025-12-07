@@ -1,4 +1,4 @@
-FROM php:8.5-fpm
+FROM php:8.5-fpm-alpine
 
 RUN apk add --no-cache \
     git \
