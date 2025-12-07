@@ -9,20 +9,19 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      - frankendphp
+      - php
       - express-app
       - go-app
     restart: always
 
-  # 2. LARAVEL/FRANKENPHP
-  frankendphp:
+  # 2. LARAVEL/PHP-FPM
+  php:
     build:
       context: ./pif_laravel
       dockerfile: Dockerfile
-    container_name: pif_laravel_app
+    container_name: pif_laravel_php
     volumes:
-      - ./pif_laravel/Caddyfile:/etc/caddy/Caddyfile
-      - ./pif_laravel:/app
+      - ./pif_laravel:/var/www/html
     environment:
       DB_CONNECTION: mysql
       DB_HOST: db
@@ -31,6 +30,8 @@ services:
       DB_PASSWORD: pif_user_password 
     depends_on:
       - db
+    expose:
+      - 9000          
     restart: always
 
   # 3. EXPRESS.JS (NODE.JS)
@@ -44,9 +45,7 @@ services:
       - /usr/src/app/node_modules 
     restart: always
 
-  # ------------------------------------------------------------------
   # 4. GO/GIN
-  # ------------------------------------------------------------------
   go-app:
     build:
       context: ./pif_go
