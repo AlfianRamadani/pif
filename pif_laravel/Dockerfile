@@ -10,11 +10,13 @@ RUN apt-get update && apt-get install -y \
     nano \
     libonig-dev \
     build-essential \
-    pkg-config \    
+    pkg-config \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libwebp-dev \
-    libmysqlclient-dev \
+    libmariadb-dev-compat \
+    libmariadb-dev \
+    libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
     
 RUN docker-php-ext-install pdo pdo_mysql opcache bcmath gd mbstring \
