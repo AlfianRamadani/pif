@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.29.3-alpine
+    container_name: pif_nginx_proxy
+    ports:
+      - "80:80" 
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro 
+    depends_on:
+      - frankendphp
+      - express-app
+      - go-app
+    restart: always
+
+  # 2. LARAVEL/FRANKENPHP
+  frankendphp:
+    build:
+      context: ./pif_laravel
+      dockerfile: Dockerfile
+    container_name: pif_laravel_app
+    volumes:
+      - ./pif_laravel:/app
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_DATABASE: pif_db
+      DB_USERNAME: pif_user
+      DB_PASSWORD: pif_user_password 
+    depends_on:
+      - db
+    restart: always
+
+  # 3. EXPRESS.JS (NODE.JS)
+  express-app:
+    build:
+      context: ./pif_express
+      dockerfile: Dockerfile
+    container_name: pif_express_app
+    volumes:
+      - ./pif_express:/usr/src/app
+      - /usr/src/app/node_modules 
+    restart: always
+
+  # ------------------------------------------------------------------
+  # 4. GO/GIN
+  # ------------------------------------------------------------------
+  go-app:
+    build:
+      context: ./pif_go
+      dockerfile: Dockerfile
+    container_name: pif_go_app
+    restart: always
+      
+  # 5. DATABASE (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: pif_mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password_change_me 
+      MYSQL_DATABASE: pif_db
+      MYSQL_USER: pif_user
+      MYSQL_PASSWORD: pif_user_password 
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+
+volumes:
+  dbdata:
+    driver: local
