@@ -21,15 +21,16 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 COPY . /var/www/html
 
-RUN composer install --no-interaction --no-plugins --no-scripts
+RUN composer install --no-interaction --no-plugins --no-scripts --optimize-autoloader
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
 RUN npm install && npm run build
 
 EXPOSE 9000
 
-ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]
