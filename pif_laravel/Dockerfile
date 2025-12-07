@@ -1,6 +1,5 @@
 FROM php:8.5-fpm
 
-# Instalasi Sistem, Composer, dan Ekstensi PHP
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -8,11 +7,14 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libsqlite3-dev \
     libpng-dev \
-    nano \
     libonig-dev \
-    # Hapus file cache setelah instalasi
-    && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-install pdo pdo_mysql opcache bcmath gd mbstring \
+    nano \
+    build-essential \
+    pkg-config \
+    libfreetype6-dev \
+    libjpeg-dev \
+    && rm -rf /var/lib/apt/lists/* # Instal dan aktifkan ekstensi
+RUN docker-php-ext-install pdo pdo_mysql opcache bcmath gd mbstring \
     && apt-get clean
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
