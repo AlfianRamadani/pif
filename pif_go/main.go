@@ -1,7 +1,9 @@
 package main
 
 import (
+	"math/rand"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,17 +16,23 @@ func fibonacci(n int) int {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	router := gin.Default()
 
 	router.GET("/test-performance", func(c *gin.Context) {
-		const n = 10
-		
+
+		const minN = 5
+		const maxN = 30 
+
+		n := rand.Intn(maxN-minN+1) + minN
+
 		result := fibonacci(n)
-		
+
 		c.JSON(200, gin.H{
 			"framework": "Gin",
 			"language":  "Go",
-			"task":      "Calculate Fibonacci(" + strconv.Itoa(n) + ")",
+			"task":      "Calculate Fibonacci(" + strconv.Itoa(n) + ")", // Menggunakan n yang acak
 			"result":    result,
 		})
 	})

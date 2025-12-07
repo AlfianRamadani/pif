@@ -13,16 +13,20 @@ class PerformanceController extends Controller
         }
         return $this->fibonacci($n - 1) + $this->fibonacci($n - 2);
     }
+
     public function testPerformance(Request $request)
     {
-        $n = 10;
+        $min_n = 5;
+        $max_n = 30; 
+
+        $n = mt_rand($min_n, $max_n);
 
         $result = $this->fibonacci($n);
 
         return response()->json([
             'framework' => 'Laravel',
             'language' => 'PHP',
-            'task' => "Calculate Fibonacci($n)",
+            'task' => "Calculate Fibonacci($n)", 
             'result' => $result
         ]);
     }
