@@ -1,5 +1,5 @@
-# Menggunakan image FrankenPHP resmi
 FROM dunglas/frankenphp
+
 
 RUN apt-get update && apt-get install -y git curl unzip \
     && rm -rf /var/lib/apt/lists/*
@@ -14,8 +14,11 @@ RUN install-php-extensions \
 
 WORKDIR /app
 
-COPY . /app
+COPY composer.json composer.lock ./
 
 RUN composer install --no-dev --optimize-autoloader
 
+COPY . /app 
+
 RUN chown -R www-data:www-data /app
+
