@@ -1,26 +1,32 @@
 FROM php:8.5-fpm
 
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     git \
     curl \
-    unzip \
-    libzip-dev \
-    libsqlite3-dev \
     libpng-dev \
-    nano \
-    libonig-dev \
-    build-essential \
-    pkg-config \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libwebp-dev \
-    libmariadb-dev-compat \
-    libmariadb-dev \
     libxml2-dev \
-    && rm -rf /var/lib/apt/lists/*
-    
-RUN docker-php-ext-install pdo pdo_mysql opcache bcmath gd mbstring \
-    && apt-get clean
+    zip \
+    unzip \
+    oniguruma-dev \
+    libzip-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    icu-dev
+
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        zip \
+        intl \
+        opcache
+
+
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
