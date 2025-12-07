@@ -21,6 +21,7 @@ services:
       dockerfile: Dockerfile
     container_name: pif_laravel_app
     volumes:
+      - ./pif_laravel/Caddyfile:/etc/caddy/Caddyfile
       - ./pif_laravel:/app
     environment:
       DB_CONNECTION: mysql
