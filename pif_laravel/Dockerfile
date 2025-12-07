@@ -1,5 +1,5 @@
 # Menggunakan image FrankenPHP resmi
-FROM dunglas/frankenphp:latest-php8.5
+FROM dunglas/frankenphp
 
 RUN install-php-extensions \
     pdo_mysql \
