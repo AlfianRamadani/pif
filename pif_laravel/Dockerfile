@@ -7,13 +7,16 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libsqlite3-dev \
     libpng-dev \
-    libonig-dev \
     nano \
+    libonig-dev \
     build-essential \
-    pkg-config \
+    pkg-config \    
     libfreetype6-dev \
-    libjpeg-dev \
-    && rm -rf /var/lib/apt/lists/* # Instal dan aktifkan ekstensi
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libmysqlclient-dev \
+    && rm -rf /var/lib/apt/lists/*
+    
 RUN docker-php-ext-install pdo pdo_mysql opcache bcmath gd mbstring \
     && apt-get clean
 
